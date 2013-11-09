@@ -48,6 +48,4 @@
 (defn quick-sort [f xs]
   (if (count<=1? xs) xs
       (let [{:keys [equal greater lesser]} (partition f xs)]
-        (concat (quick-sort f lesser)
-                equal
-                (quick-sort f greater)))))
+        (concat (quick-sort f lesser) equal (quick-sort f greater)))))
