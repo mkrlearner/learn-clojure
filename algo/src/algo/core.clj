@@ -39,12 +39,14 @@ takes care of its placement"
   (nth (iterate (partial bubble-iter f false) xs) (count xs)))
 
 (defn- merge
+  "Merge two given sequences using the comparison function f"
   [f merged [x & xrest :as xs] [y & yrest :as ys]]
   (cond (or (empty? xs) (empty? ys)) (concat merged xs ys)
         (f x y) (recur f (concat merged [x]) xrest ys)
         :else (recur f (concat merged [y]) yrest xs)))
 
 (defn merge-sort
+  "Sort the sequences using merge sort"
   [f xs]
   (if (count<=1? xs) xs
       (let [[first-half last-half] (split-at (/ (count xs) 2) xs)
@@ -52,16 +54,20 @@ takes care of its placement"
             sorted-last-half (merge-sort f last-half)]
         (merge f [] sorted-first-half sorted-last-half))))
 
-(defn- comparison [f x y]
+(defn- comparison
+  "Compaire x and y using comparison function f"
+  [f x y]
   (cond (= x y) :equal
         (f x y) :greater
         :else :lesser))
 
 (defn- partition
+  "Partition the given sequence based on the first element as pivot"
   [f [x xs :as all]]
   (group-by (partial comparison f x) all))
 
 (defn quick-sort
+  "Sort the sequence xs using quick sort"
   [f xs]
   (if (count<=1? xs) xs
       (let [{:keys [equal greater lesser]} (partition f xs)]
